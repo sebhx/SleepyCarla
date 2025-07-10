@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "setup:fresh": "tsx server/setup-fresh-database.ts",
+    "migrate": "tsx server/migration.ts",
+    "migrate:fresh": "tsx server/migration.ts --fresh",
+    "migrate:backup": "tsx server/migration.ts --backup --validate",
+    "migrate:full": "tsx server/migration.ts --backup --validate --drop-old",
+    "migrate:rollback": "tsx server/migration.ts --rollback",
+    "clear:db": "tsx server/clear-database.ts"
+  }
+}

@@ -1,0 +1,14 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="1136" viewBox="0 0 640 1136">
+  <rect width="640" height="1136" fill="#FFF8F8"/>
+  <rect x="50" y="100" width="540" height="936" fill="#FFB6C1" rx="20"/>
+  <text x="320" y="300" text-anchor="middle" font-size="48" font-family="Arial, sans-serif" fill="white">
+    SleepyCarla
+  </text>
+  <text x="320" y="370" text-anchor="middle" font-size="24" font-family="Arial, sans-serif" fill="white">
+    Baby Sleep Tracker
+  </text>
+  <text x="320" y="600" text-anchor="middle" font-size="120" font-family="Arial, sans-serif">
+    🌙
+  </text>
+</svg>

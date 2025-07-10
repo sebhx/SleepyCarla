@@ -1,4 +1,7 @@
 // Settings types for SleepyCarla
+
+export type ThemeMode = 'light' | 'dark' | 'auto';
+
 export interface AppSettings {
   // Baby profile
   babyAge: {
@@ -13,7 +16,7 @@ export interface AppSettings {
   // Preferences
   enableNapSuggestions: boolean;
   notificationsEnabled: boolean;
-  theme: 'light' | 'dark' | 'auto';
+  theme: ThemeMode;
 }
 
 export type AgeRange = 
@@ -43,4 +46,28 @@ export interface SleepScience {
     averageNapDuration: number;
     source: string;
   }[];
+}
+
+// API Types for backend integration
+export interface UserSettings {
+  id: string;
+  babyAgeRange: AgeRange;
+  babyExactAgeWeeks?: number;
+  bedtime: string;
+  morningWake: string;
+  enableNapSuggestions: boolean;
+  notificationsEnabled: boolean;
+  theme: ThemeMode;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateUserSettingsRequest {
+  babyAgeRange?: AgeRange;
+  babyExactAgeWeeks?: number;
+  bedtime?: string;
+  morningWake?: string;
+  enableNapSuggestions?: boolean;
+  notificationsEnabled?: boolean;
+  theme?: ThemeMode;
 }

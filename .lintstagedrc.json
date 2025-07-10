@@ -1,0 +1,5 @@
+{
+  "*.{ts,vue}": [
+    "npm run test:run"
+  ]
+}
