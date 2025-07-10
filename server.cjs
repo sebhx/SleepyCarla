@@ -59,6 +59,27 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Test endpoint working' });
 });
 
+// Debug endpoint to check what files exist
+app.get('/debug', (req, res) => {
+  const fs = require('fs');
+  try {
+    const files = fs.existsSync(distPath) ? fs.readdirSync(distPath) : [];
+    res.json({
+      distPath,
+      distExists: fs.existsSync(distPath),
+      files: files.slice(0, 20), // Show first 20 files
+      indexExists: fs.existsSync(path.join(distPath, 'index.html')),
+      workingDir: process.cwd()
+    });
+  } catch (error) {
+    res.json({
+      error: error.message,
+      distPath,
+      workingDir: process.cwd()
+    });
+  }
+});
+
 // Serve static files from the Vue app build
 console.log('Setting up static file serving for:', distPath);
 app.use(express.static(distPath));
@@ -67,7 +88,26 @@ app.use(express.static(distPath));
 app.get('*', (req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   console.log('Serving index.html from:', indexPath);
-  res.sendFile(indexPath);
+  
+  // Check if index.html exists
+  const fs = require('fs');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    console.error('index.html not found at:', indexPath);
+    res.status(404).send(`
+      <html>
+        <head><title>SleepyCarla - Setup Required</title></head>
+        <body>
+          <h1>🌙 SleepyCarla</h1>
+          <p>The app is running, but the frontend build files are missing.</p>
+          <p>This usually means the build process didn't complete properly.</p>
+          <p><a href="/health">Check Health Status</a></p>
+          <p><a href="/test">Test API</a></p>
+        </body>
+      </html>
+    `);
+  }
 });
 
 // Error handling
