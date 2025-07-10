@@ -58,6 +58,27 @@ Once deployed:
 ✅ **Security**: HTTPS, security headers, CORS
 ✅ **Health Checks**: Automatic monitoring
 ✅ **Auto-scaling**: Railway handles traffic scaling
+✅ **Node.js Detection**: `.nvmrc`, `Procfile`, and `start.js`
+✅ **Clean Dependencies**: Fresh `package-lock.json`
+✅ **Deployment Config**: Simplified `railway.toml`
+
+## 🚀 Recent Fixes for Build Issues
+
+We've fixed the Nixpacks/Nix build error by:
+- Removing `nixpacks.toml` to let Railway auto-detect Node.js
+- Adding `.nvmrc` file for Node.js version specification
+- Creating `Procfile` for Railway process definition
+- Adding `start.js` custom startup script
+- Simplifying `railway.toml` configuration
+
+## 📋 Next Steps
+
+1. **Go to Railway Dashboard**: https://railway.app/dashboard
+2. **Find your SleepyCarla project**
+3. **Check the Deployments tab**
+4. **Railway should automatically deploy the latest changes**
+
+If the deployment still fails, check `RAILWAY_TROUBLESHOOTING.md` for detailed solutions.
 
 ## 🎯 Expected Costs
 
