@@ -84,6 +84,19 @@ NPM_CONFIG_OPTIONAL = "true"
 Let Railway generate it on Linux to ensure platform-specific dependencies are included.
 
 ## Status
-✅ **FIXED** - Node.js 20 upgrade and PWA plugin compatibility fixes applied
-✅ **COMMITTED** - All changes pushed to GitHub
-🔄 **DEPLOYING** - Railway should automatically redeploy with Node.js 20
+✅ **FIXED** - Reverted to Node.js 18 and compatible PWA plugin version
+✅ **COMMITTED** - All changes pushed to GitHub  
+🔄 **DEPLOYING** - Railway should auto-detect Node.js 18 and use compatible dependencies
+
+## Latest Approach
+Since Railway had issues with Node.js 20 package names, we've:
+1. **Removed `nixpacks.toml`** - Let Railway auto-detect everything
+2. **Reverted to Node.js 18** - More stable for Railway deployments
+3. **Used compatible PWA plugin version** - `^0.19.8` works with Node.js 18
+4. **Kept `.npmrc`** - Ensures optional dependencies are still installed
+
+Railway should now use:
+- Node.js 18 (from package.json engines)
+- Compatible PWA plugin that doesn't use crypto.hash
+- Proper optional dependency installation
+- Auto-detected build configuration
