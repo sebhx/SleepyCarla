@@ -7,10 +7,14 @@ const { spawn } = require('child_process');
 
 console.log('🚀 Starting SleepyCarla server...');
 
-// Start the production server
-const server = spawn('npm', ['run', 'server:production'], {
+// Start the server directly with tsx
+const server = spawn('npx', ['tsx', 'server/server.ts'], {
   stdio: 'inherit',
-  shell: process.platform === 'win32'
+  shell: process.platform === 'win32',
+  env: {
+    ...process.env,
+    NODE_ENV: 'production'
+  }
 });
 
 server.on('exit', (code) => {

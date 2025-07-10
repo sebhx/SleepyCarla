@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3003;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
 // Production-ready CORS configuration
 const corsOptions = {
@@ -45,7 +45,11 @@ if (process.env.NODE_ENV === 'production') {
 app.use('/api/user-settings', userSettingsRoutes);
 app.use('/api/sleep-sessions', sleepSessionsRoutes);
 
-// Health check
+// Health check endpoints
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'SleepyCarla is running' });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'SleepyCarla API is running' });
 });
@@ -58,7 +62,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🌙 SleepyCarla API server running on port ${PORT}`);
 });
 
