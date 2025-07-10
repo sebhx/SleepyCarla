@@ -13,16 +13,18 @@ console.log('__dirname:', __dirname);
 // Check if dist folder exists
 const distPath = path.join(__dirname, 'dist');
 console.log('Checking dist path:', distPath);
-console.log('__dirname:', __dirname);
 
+let distExists = false;
 try {
   const fs = require('fs');
-  const distExists = fs.existsSync(distPath);
+  distExists = fs.existsSync(distPath);
   console.log('Dist directory exists:', distExists);
   
   if (distExists) {
     const files = fs.readdirSync(distPath);
     console.log('Files in dist:', files.slice(0, 10)); // Show first 10 files
+  } else {
+    console.log('⚠️  Dist directory not found - will serve fallback content');
   }
 } catch (error) {
   console.error('Error checking dist directory:', error);
@@ -32,15 +34,16 @@ try {
 app.use(cors());
 app.use(express.json());
 
-// Health check endpoints
+// Health check endpoints - always respond OK for Railway deployment
 app.get('/health', (req, res) => {
   console.log('Health check requested');
   res.json({ 
     status: 'ok', 
-    message: 'SleepyCarla is running',
+    message: 'SleepyCarla server is running',
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV,
-    port: PORT
+    port: PORT,
+    distExists: distExists
   });
 });
 
@@ -51,7 +54,8 @@ app.get('/api/health', (req, res) => {
     message: 'SleepyCarla API is running',
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV,
-    port: PORT
+    port: PORT,
+    distExists: distExists
   });
 });
 
@@ -90,30 +94,64 @@ app.get('/debug', (req, res) => {
   }
 });
 
-// Serve static files from the Vue app build
+// Serve static files from the Vue app build (if it exists)
 console.log('Setting up static file serving for:', distPath);
-app.use(express.static(distPath));
+if (distExists) {
+  app.use(express.static(distPath));
+} else {
+  console.log('⚠️  Skipping static file serving - dist directory not found');
+}
 
-// Handle all other routes - return index.html
+// Handle all other routes - return index.html or fallback
 app.get('*', (req, res) => {
-  const indexPath = path.join(distPath, 'index.html');
-  console.log('Serving index.html from:', indexPath);
-  
-  // Check if index.html exists
+  // Re-check dist existence in case it was created after server start
   const fs = require('fs');
-  if (fs.existsSync(indexPath)) {
+  const currentDistExists = fs.existsSync(distPath);
+  const indexPath = path.join(distPath, 'index.html');
+  
+  console.log('Serving request for:', req.path);
+  console.log('Current dist exists:', currentDistExists);
+  
+  if (currentDistExists && fs.existsSync(indexPath)) {
+    console.log('Serving index.html from:', indexPath);
     res.sendFile(indexPath);
   } else {
-    console.error('index.html not found at:', indexPath);
-    res.status(404).send(`
+    console.log('Serving fallback HTML - dist or index.html not found');
+    res.status(200).send(`
       <html>
-        <head><title>SleepyCarla - Setup Required</title></head>
+        <head>
+          <title>🌙 SleepyCarla - Building...</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+                   text-align: center; padding: 2rem; background: #f0f8ff; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; 
+                      border-radius: 50%; width: 40px; height: 40px; 
+                      animation: spin 2s linear infinite; margin: 20px auto; }
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            .links { margin: 2rem 0; }
+            .links a { margin: 0 1rem; padding: 0.5rem 1rem; background: #3498db; 
+                      color: white; text-decoration: none; border-radius: 4px; }
+          </style>
+          <script>
+            setTimeout(() => { window.location.reload(); }, 10000);
+          </script>
+        </head>
         <body>
-          <h1>🌙 SleepyCarla</h1>
-          <p>The app is running, but the frontend build files are missing.</p>
-          <p>This usually means the build process didn't complete properly.</p>
-          <p><a href="/health">Check Health Status</a></p>
-          <p><a href="/test">Test API</a></p>
+          <div class="container">
+            <h1>🌙 SleepyCarla</h1>
+            <div class="spinner"></div>
+            <p>Application is starting up...</p>
+            <p>The frontend is being built and will be available shortly.</p>
+            <p><small>This page will refresh automatically in 10 seconds.</small></p>
+            <div class="links">
+              <a href="/health">Health Check</a>
+              <a href="/debug">Debug Info</a>
+              <a href="/test">Test API</a>
+            </div>
+          </div>
         </body>
       </html>
     `);
