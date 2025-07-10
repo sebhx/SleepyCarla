@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["nodejs-18_x"]
+nixPkgs = ["nodejs-20_x"]
 
 [phases.install]
 cmd = "rm -rf node_modules package-lock.json && npm install --include=optional --verbose"
