@@ -10,25 +10,26 @@ const path = require('path');
 console.log('🚀 Starting SleepyCarla server...');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Port:', process.env.PORT || '3000');
+console.log('Working directory:', process.cwd());
 
 // Check if dist directory exists
 const distPath = path.join(__dirname, 'dist');
+console.log('Checking dist path:', distPath);
+
 if (!fs.existsSync(distPath)) {
   console.error('❌ dist directory not found. Build may have failed.');
+  console.log('Contents of current directory:');
+  fs.readdirSync(__dirname).forEach(file => {
+    console.log('  ', file);
+  });
   process.exit(1);
-}
-
-// Try tsx first, fall back to node if tsx is not available
-let command, args;
-
-if (fs.existsSync(path.join(__dirname, 'node_modules', '.bin', 'tsx'))) {
-  command = 'npx';
-  args = ['tsx', 'server/server-simple.ts'];
 } else {
-  console.log('tsx not available, trying to run with node...');
-  command = 'node';
-  args = ['server/server-simple.js'];
+  console.log('✅ dist directory found');
 }
+
+// Use the simple JavaScript server
+const command = 'node';
+const args = ['server.cjs'];
 
 console.log(`Running: ${command} ${args.join(' ')}`);
 

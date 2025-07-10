@@ -24,7 +24,7 @@
     "start:network": "npm run build && concurrently \"npm run server\" \"npm run preview:network\"",
     "dev:full": "concurrently \"npm run server:dev\" \"npm run dev\"",
     "railway:build": "npm run build",
-    "railway:start": "node start.js",
+    "railway:start": "node server.cjs",
     "migrate": "tsx server/migrate-to-postgresql.ts",
     "setup:fresh": "tsx server/setup-fresh-database.ts",
     "migrate:fresh": "tsx server/migration.ts --fresh",
