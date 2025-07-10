@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
@@ -17,15 +21,14 @@
     "start:full": "npm run build && concurrently \"npm run server\" \"npm run preview\"",
     "start:network": "npm run build && concurrently \"npm run server\" \"npm run preview:network\"",
     "dev:full": "concurrently \"npm run server:dev\" \"npm run dev\"",
-    "railway:build": "npm run build:production",
+    "railway:build": "npm run build",
     "railway:start": "npm run server:production",
     "migrate": "tsx server/migrate-to-postgresql.ts",
     "setup:fresh": "tsx server/setup-fresh-database.ts",
     "migrate:fresh": "tsx server/migration.ts --fresh",
     "migrate:backup": "tsx server/migration.ts --backup --validate",
     "clear:db": "tsx server/clear-database.ts",
-    "postinstall": "npm run setup:production",
-    "setup:production": "node -e \"if (process.env.NODE_ENV === 'production') { require('./server/setup-production.js'); }\"",
+    "setup:production": "node -e \"if (process.env.NODE_ENV === 'production') { console.log('Production setup skipped during build'); }\"",
     "deploy:check": "node scripts/pre-deployment-check.js",
     "deploy:icons": "node scripts/generate-pwa-icons.js",
     "deploy:prepare": "npm run deploy:icons && npm run build:production && npm run deploy:check",
@@ -35,8 +38,7 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch",
     "test:critical": "vitest run tests/unit",
-    "test:quick": "node test-critical.js",
-    "prepare": "husky install"
+    "test:quick": "node test-critical.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
