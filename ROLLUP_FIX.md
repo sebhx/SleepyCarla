@@ -85,22 +85,23 @@ Let Railway generate it on Linux to ensure platform-specific dependencies are in
 
 ## Status
 ✅ **BUILD WORKING** - App successfully builds on Railway!
-✅ **HEALTH CHECK FIXED** - Added `/health` endpoint for Railway  
+🔧 **HEALTH CHECK IMPROVED** - Added simplified server with better error handling
 ✅ **COMMITTED** - All changes pushed to GitHub  
-🔄 **DEPLOYING** - Railway should now pass health checks and be fully functional
+🔄 **DEPLOYING** - Railway should now start server successfully
 
-## Latest Update - Health Check Fix
-The build was successful, but health checks were failing. Fixed by:
-1. **Added `/health` endpoint** - Railway was checking `/health` but we only had `/api/health`
-2. **Improved server startup** - Direct tsx execution instead of npm scripts
-3. **Fixed port binding** - Listen on all interfaces (0.0.0.0) with proper port parsing
-4. **Updated railway.toml** - Correct health check path configuration
+## Latest Update - Server Startup Improvements
+Health checks were still failing, so I've added:
+1. **Simplified server** - `server-simple.ts` with minimal dependencies
+2. **Better error handling** - Catch startup errors and log them
+3. **Improved debugging** - More console logs to identify issues
+4. **Fallback startup** - Try tsx, fall back to node if needed
+5. **Dist directory check** - Verify build files exist before starting
 
-## What's Working Now
-- ✅ Build completes successfully
-- ✅ Dependencies install properly
-- ✅ Server starts with correct configuration
-- ✅ Health check endpoint responds
-- ✅ Railway should pass all checks
+## Server Improvements
+- ✅ No database dependencies for basic startup
+- ✅ Clear error logging and debugging
+- ✅ Health check endpoints at `/health` and `/api/health`
+- ✅ Static file serving for Vue app
+- ✅ Proper port binding (0.0.0.0)
 
-Railway should now deploy successfully and be accessible at your Railway URL!
+Railway should now successfully start the server and pass health checks!
