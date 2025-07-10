@@ -85,23 +85,29 @@ Let Railway generate it on Linux to ensure platform-specific dependencies are in
 
 ## Status
 ✅ **BUILD WORKING** - App successfully builds on Railway!
-🔧 **HEALTH CHECK IMPROVED** - Added simplified server with better error handling
+✅ **HEALTH CHECK WORKING LOCALLY** - Simple CommonJS server tested and working
 ✅ **COMMITTED** - All changes pushed to GitHub  
-🔄 **DEPLOYING** - Railway should now start server successfully
+🔄 **DEPLOYING** - Railway should now deploy with working health checks
 
-## Latest Update - Server Startup Improvements
-Health checks were still failing, so I've added:
-1. **Simplified server** - `server-simple.ts` with minimal dependencies
-2. **Better error handling** - Catch startup errors and log them
-3. **Improved debugging** - More console logs to identify issues
-4. **Fallback startup** - Try tsx, fall back to node if needed
-5. **Dist directory check** - Verify build files exist before starting
+## Latest Update - Simple CommonJS Server
+Created a bulletproof server approach:
+1. **Pure CommonJS server** - `server.cjs` with no TypeScript dependencies
+2. **Tested locally** - Health check responds with 200 OK
+3. **Comprehensive logging** - Debug information for Railway deployment
+4. **Updated all references** - Procfile, package.json, start.js all point to new server
+5. **Eliminated ES module issues** - No more import/require conflicts
 
-## Server Improvements
-- ✅ No database dependencies for basic startup
-- ✅ Clear error logging and debugging
-- ✅ Health check endpoints at `/health` and `/api/health`
-- ✅ Static file serving for Vue app
-- ✅ Proper port binding (0.0.0.0)
+## Server Test Results
+✅ **Local server starts successfully**
+✅ **Health check responds**: `{"status":"ok","message":"SleepyCarla is running","timestamp":"2025-07-10T22:50:02.028Z","port":3000}`
+✅ **No compilation errors**
+✅ **Simple dependency chain**
 
-Railway should now successfully start the server and pass health checks!
+## What's Different Now
+- **No TypeScript** - Pure JavaScript server for Railway
+- **No tsx dependency** - Direct node execution
+- **CommonJS format** - Avoids ES module conflicts
+- **Comprehensive logging** - Debug info for troubleshooting
+- **Static file serving** - Serves Vue app from dist directory
+
+Railway should now successfully deploy and pass health checks!
