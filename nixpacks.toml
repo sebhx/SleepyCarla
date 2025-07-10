@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["nodejs-18_x"]
+
+[phases.install]
+cmd = "npm install --production=false"
+
+[phases.build]
+cmd = "npm run railway:build"
+
+[start]
+cmd = "npm run railway:start"
+
+[variables]
+NODE_ENV = "production"
+NPM_CONFIG_PRODUCTION = "false"
