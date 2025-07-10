@@ -11,8 +11,9 @@ console.log('Port:', PORT);
 console.log('__dirname:', __dirname);
 
 // Check if dist folder exists
-const distPath = path.join(__dirname, '..', 'dist');
+const distPath = path.join(__dirname, 'dist');
 console.log('Checking dist path:', distPath);
+console.log('__dirname:', __dirname);
 
 try {
   const fs = require('fs');
@@ -63,18 +64,27 @@ app.get('/test', (req, res) => {
 app.get('/debug', (req, res) => {
   const fs = require('fs');
   try {
-    const files = fs.existsSync(distPath) ? fs.readdirSync(distPath) : [];
+    const currentDirFiles = fs.readdirSync(__dirname);
+    const distPath1 = path.join(__dirname, 'dist');
+    const distPath2 = path.join(process.cwd(), 'dist');
+    
     res.json({
-      distPath,
+      __dirname,
+      workingDir: process.cwd(),
+      currentDirFiles: currentDirFiles.slice(0, 20),
+      distPath: distPath,
+      distPath1,
+      distPath2,
       distExists: fs.existsSync(distPath),
-      files: files.slice(0, 20), // Show first 20 files
-      indexExists: fs.existsSync(path.join(distPath, 'index.html')),
-      workingDir: process.cwd()
+      distExists1: fs.existsSync(distPath1),
+      distExists2: fs.existsSync(distPath2),
+      files: fs.existsSync(distPath) ? fs.readdirSync(distPath).slice(0, 20) : [],
+      indexExists: fs.existsSync(path.join(distPath, 'index.html'))
     });
   } catch (error) {
     res.json({
       error: error.message,
-      distPath,
+      __dirname,
       workingDir: process.cwd()
     });
   }
