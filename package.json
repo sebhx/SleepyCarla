@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "build:server": "tsc server/server.ts --outDir server --target es2020 --module commonjs --esModuleInterop --allowSyntheticDefaultImports --skipLibCheck",
+    "build:all": "npm run build && npm run build:server",
     "build:production": "cross-env NODE_ENV=production vue-tsc -b && vite build",
     "preview": "vite preview",
     "preview:network": "vite preview --host",
