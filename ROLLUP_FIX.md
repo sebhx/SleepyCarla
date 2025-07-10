@@ -84,19 +84,20 @@ NPM_CONFIG_OPTIONAL = "true"
 Let Railway generate it on Linux to ensure platform-specific dependencies are included.
 
 ## Status
-✅ **FIXED** - Reverted to Node.js 18 and compatible PWA plugin version
+✅ **FIXED** - PWA plugin temporarily disabled to resolve dependency conflicts
 ✅ **COMMITTED** - All changes pushed to GitHub  
-🔄 **DEPLOYING** - Railway should auto-detect Node.js 18 and use compatible dependencies
+🔄 **DEPLOYING** - Railway should build successfully without PWA plugin
 
-## Latest Approach
-Since Railway had issues with Node.js 20 package names, we've:
-1. **Removed `nixpacks.toml`** - Let Railway auto-detect everything
-2. **Reverted to Node.js 18** - More stable for Railway deployments
-3. **Used compatible PWA plugin version** - `^0.19.8` works with Node.js 18
-4. **Kept `.npmrc`** - Ensures optional dependencies are still installed
+## Current Approach - PWA Plugin Disabled
+Due to dependency conflicts between `vite-plugin-pwa` and Vite 7, we've temporarily:
+1. **Disabled PWA plugin** - Commented out in `vite.config.ts`
+2. **Removed PWA dependencies** - From `package.json` to avoid conflicts
+3. **Kept core functionality** - App will still work, just without PWA features
 
-Railway should now use:
-- Node.js 18 (from package.json engines)
-- Compatible PWA plugin that doesn't use crypto.hash
-- Proper optional dependency installation
-- Auto-detected build configuration
+## Deployment Priority
+Getting the basic app deployed first is the priority. Once deployed, we can:
+1. **Add PWA features back** - With proper version compatibility
+2. **Enable service worker** - After confirming base app works
+3. **Add manifest** - For mobile app installation
+
+Railway should now build successfully without dependency conflicts!
